@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <title>Kodland Quiz</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+</head>
+
+<body>
+    <h1 id="title">Kodland Quiz</h1>
+    <p id="description">Lütfen soruları dikkatle inceleyip eksiksiz cevaplayınız</p>
+
+    <form id="survey-form" method="POST" action="/submit">
+        <div class="input-headings">
+            <label for="name" id="name-label">İsim</label>
+            <input id="name" type="text" name="name" placeholder="Full name" class="form-inputs" required>
+            <br>
+
+            <label for="surname" id="surname-label">Soyisim</label>
+            <input id="surname" type="text" name="surname" placeholder="Full name" class="form-inputs" required>
+            <br>
+            <br>
+
+            {% include 'partials/multiple_choice.html' %}
+            <br>
+            {% include 'partials/open_ended.html' %}
+            <br>
+
+            <input id="submit" type="submit" value="Cevapları Gönder" class="submit-button">
+        </div>
+    </form>
+<!--     
+    <script>
+        $(document).ready(function () {
+            var messages = `{{ get_flashed_messages(with_categories = True) | tojson}}`;
+        if (Array.isArray(messages) && messages.length > 0) {
+            messages.forEach(function (message) {
+                if (Array.isArray(message) && message.length === 2) {
+                    var category = message[0]; // success, error, info, etc.
+                    var text = message[1];
+                    toastr[category](text);
+                }
+            });
+        }
+        });
+    </script> -->
+
+
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function (event) {
+                event.preventDefault(); // Formun normal submit işlemini durdurur
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : error;
+                        toastr.error(errorMessage);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+<div class="footer">
+    <p>Mehmet Göksu / <a href="https://github.com/UtariD86">Github</a>  / <a href="https://www.linkedin.com/in/mehmet-g%C3%B6ksu-b40a5423a/">Linkedin</a>  </p>
+</div>
+</html>

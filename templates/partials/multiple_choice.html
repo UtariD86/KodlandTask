@@ -1,0 +1,12 @@
+<div id="multiple-choice-section">
+    {% for question in multiple_choice_questions %}
+    <fieldset>
+        <legend>{{ question.question_text }}</legend>
+        {% for choice in question.choices %}
+        <input type="radio" id="choice_{{ choice.id }}" name="question_{{ question.id }}" value="{{ choice.id }}">
+        <label for="choice_{{ choice.id }}">{{ choice.choice_text }}</label>
+        <br>
+        {% endfor %}
+    </fieldset>
+    {% endfor %}
+</div>

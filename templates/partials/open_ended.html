@@ -1,0 +1,8 @@
+<div id="open-ended-section">
+    {% for question in open_ended_questions %}
+    <fieldset>
+        <legend>{{ question.question_text }}</legend>
+        <textarea name="question_{{ question.id }}" rows="5" cols="59"></textarea>
+    </fieldset>
+    {% endfor %}
+</div>

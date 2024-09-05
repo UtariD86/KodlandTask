@@ -12,16 +12,20 @@
 
 <body>
     <h1 id="title">Kodland Quiz</h1>
-    <p id="description">Lütfen soruları dikkatle inceleyip eksiksiz cevaplayınız</p>
-
+    <div style="background-color: rgb(36, 87, 103, 0.5);
+    border-radius: 50px;
+    padding: 20px;
+    width: 100% !important;"
+    <a style="font-weight: 700;" class="score-text">{{username}}</a>
+    <hr>
+    <div class="score-div">Son Skorunuz:<a class="score-text"> %{{last_score}}</a></div>
+    <div class="score-div">En Yüksek Skorunuz: <a class="score-text"> %{{highest_score}}</a></div>
+</div>
+<p id="description">Lütfen soruları dikkatle inceleyip eksiksiz cevaplayınız</p>
     <form id="survey-form" method="POST" action="/submit">
         <div class="input-headings">
-            <label for="name" id="name-label">İsim</label>
-            <input id="name" type="text" name="name" placeholder="Full name" class="form-inputs" required>
-            <br>
-
-            <label for="surname" id="surname-label">Soyisim</label>
-            <input id="surname" type="text" name="surname" placeholder="Full name" class="form-inputs" required>
+            <label for="username" id="name-label">Kullanıcı Adı</label>
+            <input id="username" type="text" name="username" placeholder="UserName" class="form-inputs" required>
             <br>
             <br>
 
@@ -33,22 +37,6 @@
             <input id="submit" type="submit" value="Cevapları Gönder" class="submit-button">
         </div>
     </form>
-<!--     
-    <script>
-        $(document).ready(function () {
-            var messages = `{{ get_flashed_messages(with_categories = True) | tojson}}`;
-        if (Array.isArray(messages) && messages.length > 0) {
-            messages.forEach(function (message) {
-                if (Array.isArray(message) && message.length === 2) {
-                    var category = message[0]; // success, error, info, etc.
-                    var text = message[1];
-                    toastr[category](text);
-                }
-            });
-        }
-        });
-    </script> -->
-
 
     <script>
         $(document).ready(function () {
@@ -65,6 +53,9 @@
                     success: function (response) {
                         if (response.status === 'success') {
                             toastr.success(response.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 5000);
                         } else {
                             toastr.error(response.message);
                         }

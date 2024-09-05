@@ -13,7 +13,7 @@ form {
     padding: 2.5rem 2.5rem;
     border-radius: 2rem;
     width: 500px;
-    margins: auto;
+    margin: auto;
 }
 
 .input-headings {
@@ -62,4 +62,15 @@ form {
 .footer a:hover {
     color: black;
     text-decoration: none;
+}
+
+.score-div{
+    text-align: right;
+    border-radius: 50px;
+    color: white;
+    text-shadow: black 0 0 10px;
+}
+
+.score-text{
+    font-size: x-large !important;
 }

@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -21,12 +22,23 @@ class Choice(db.Model):
 class Answer(db.Model):
     __tablename__ = 'answers'
     id = db.Column(db.Integer, primary_key=True)
-    user_first_name = db.Column(db.String(50), nullable=False)
-    user_last_name = db.Column(db.String(50), nullable=False)
-    user_ip = db.Column(db.String(45), nullable=False)  # Kullanıcı IP adresini saklamak için
-    is_multiple = db.Column(db.Boolean, nullable=False)  # Sorunun çoktan seçmeli olup olmadığını belirtir
+    username = db.Column(db.String(50), nullable=False)
+    is_multiple = db.Column(db.Boolean, nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
     choice_id = db.Column(db.Integer, nullable=True)  # Çoktan seçmeli cevaplar için
     answer_text = db.Column(db.String(200), nullable=True)  # Metin tabanlı cevaplar için
+    submit_id = db.Column(db.Integer, db.ForeignKey('submits.id'), nullable=False)  # Submit ID referansı
 
     question = db.relationship('Question', backref=db.backref('answers', lazy=True))
+    submit = db.relationship('Submit', backref=db.backref('answers', lazy=True))
+
+class Submit(db.Model):
+    __tablename__ = 'submits'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)  # Kullanıcının adı
+    correct_answers = db.Column(db.Integer, nullable=False)  # Doğru sayısı
+    submit_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)  # Gönderim tarihi
+    score = db.Column(db.Float, nullable=False)  # 100 üzerinden puanlama, max 1.0 olacak şekilde
+
+    def __repr__(self):
+        return f'<Submit {self.id} - Username: {self.username} - Score: {self.score}>'
